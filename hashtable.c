@@ -16,8 +16,9 @@ item* linear_search(item* items, int size, const char* key) {
 }
 
 int main(void) {
+  // Loading the predefined symbol table
   item items[] = {
-      {"foo", 10}, {"bar", 42}, {"bazz", 36}, {"buzz", 7},
+      {"R0", 0}, {"R1", 1}, {"R2", 2}, {"R3", 3},
       {"bob", 11}, {"jane", 100}, {"x", 200}};
   int num_items = sizeof(items) / sizeof(item);
 
