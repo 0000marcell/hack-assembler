@@ -52,7 +52,6 @@ int main() {
   while (fgets(currentline, sizeof(currentline), file) != NULL) {
     
     char line[256]; 
-    char *subString; 
 
     if(!is_empty(currentline)) {
       // VARIABLES 
@@ -60,37 +59,44 @@ int main() {
       int    ch = '@';
       ptr = strchr(currentline, ch);
       if(ptr) {
-        char *subString; 
-        subString = strtok(&ptr[1],"\0");   // find the second double quote
+        char *subString = strtok(&ptr[1], "\r"); 
+        //printf("%c %d", subString[2], subString[2]);
         int is_already_on_table = 0;
         for(int i = 0; i < current_table_index; i++) {
-          printf("%s == %s\n", subString, symbols[i].key);
-          if(strcmp(symbols[i].key, subString)) {
-            printf("found!");
+          //printf("%s == %s\n", subString, symbols[i].key);
+          //printf(">> %d\n", strcmp(symbols[i].key, subString));
+          if(strcmp(symbols[i].key, subString) == 0) {
+            //printf("found!\n");
             is_already_on_table = 1;
             break;
           }
         }
 
         if(!is_already_on_table) {
-          item new = { subString, variable_start_index };
-          symbols[current_table_index] = new;
-          variable_start_index++;
-          current_table_index++;
+          //printf("subString: %s vsi: %d\n", subString, variable_start_index);
+          item n = { subString, variable_start_index };
+          //symbols[current_table_index] = n;
+          //variable_start_index++;
+          //current_table_index++;
         }
       }
 
       // JUMP SYMBOLS
       strcpy(line, currentline);
       if (line[0] == '(') {
-        subString = strtok(&line[1],")");   // find the second double quote
+        char *subString = strtok(&line[1],")");   // find the second double quote
         item new = { subString, line_number };
         symbols[current_table_index] = new; 
         current_table_index++;
-        printf("symbol '%s' on line %d \n", subString, line_number);
+        printf("symbol %s on line %d \n", subString, line_number);
       }
       line_number++;
     }
+  }
+
+  for(int i = 0; i < current_table_index; i++) {
+    printf("k: %s v: %d\n", symbols[i].key, symbols[i].value);
+    i++;
   }
 
   fclose(file);
