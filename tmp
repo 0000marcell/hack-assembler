@@ -1,6 +1,6 @@
-symbol 'OUTPUT_FIRST' on line 10 
-symbol 'OUTPUT_D' on line 13 
-symbol 'INFINITE_LOOP' on line 16 
+symbol OUTPUT_FIRST on line 10 cti: 23
+symbol OUTPUT_D on line 13 cti: 24
+symbol INFINITE_LOOP on line 16 cti: 25
 k: R0 v: 0
 k: R2 v: 2
 k: R4 v: 4
@@ -13,5 +13,4 @@ k: SCREEN v: 16384
 k: SP v: 0
 k: ARG v: 2
 k: THAT v: 4
-k:   0;JMP            // infinite loop
- v: 13
+k: INFINITE_LOOP v: 13
