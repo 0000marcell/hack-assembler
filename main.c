@@ -36,12 +36,6 @@ int is_empty(char * currentline) {
   return all_blank;
 }
 
-static void insert(item *p, char *key, int value)
-{
-    p->key = key;
-    p->value = value;
-}
-
 int main() {
   item symbols[100] = {{"R0", 0}, {"R1", 1}, 
     {"R2", 2}, {"R3", 3}, {"R4", 4}, {"R5", 5}, {"R6", 6}, {"R7", 7},
@@ -50,7 +44,7 @@ int main() {
     {"LCL", 1}, {"ARG", 2}, {"THIS", 3}, {"THAT", 4}};
 
   FILE *file = fopen("./testfile", "r");
-  char *currentline;
+  char currentline[256];
   int current_table_index = 23;
   int variable_start_index = 16;
   int line_number = 0;
@@ -62,17 +56,14 @@ int main() {
         char line[256]; 
         strcpy(line, currentline);
         printf("%s\n", line);
-        char subString;
-        subString[0] = strtok(&line[1],")");   // find the second double quote
-        insert(&symbols[current_table_index],  subString, line_number);
-        printf("symbol %s on line %d cti: %d\n", subString, line_number, current_table_index);
+        char *subString;
+        subString = strtok(&line[1],")");   // find the second double quote
+        symbols[current_table_index].key = strdup(subString);
+        symbols[current_table_index].value = line_number;
         current_table_index++;
       }
-      line_number++;
-      //printf("is not empty!\n");
-      // VARIABLES 
-      //char * ptr;
-      //int    ch = '@';
+      char * ptr;
+      int    ch = '@';
       //ptr = strchr(currentline, ch);
       //if(ptr) {
         //char *subString = strtok(&ptr[1], "\r"); 
@@ -96,19 +87,17 @@ int main() {
           //current_table_index++;
         //}
       //}
-
-      
+      line_number++;
     }
   }
 
-  printf("k: %s v: %d\n", symbols[23].key, symbols[23].value);
-  printf("k: %s v: %d\n", symbols[24].key, symbols[24].value);
-  printf("k: %s v: %d\n", symbols[25].key, symbols[25].value);
+  /* printf("k: %s v: %d\n", symbols[23].key, symbols[23].value); */
+  /* printf("k: %s v: %d\n", symbols[24].key, symbols[24].value); */
+  /* printf("k: %s v: %d\n", symbols[25].key, symbols[25].value); */
 
-  /* for(int i = 0; i < current_table_index; i++) { */
-  /*   printf("k: %s v: %d\n", symbols[i].key, symbols[i].value); */
-  /*   i++; */
-  /* } */
+  for(int i = 0; i < current_table_index; i++) {
+    printf("k: %s v: %d\n", symbols[i].key, symbols[i].value);
+  }
 
   fclose(file);
 }
