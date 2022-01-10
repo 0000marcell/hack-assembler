@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "parser.h"
 
 // destination computation and jump
 // dest = comp; jump
@@ -101,10 +102,20 @@ char * translate(char *key, char type[]) {
 }
 
 char * parse(char str[]) {
+  printf("%s\n", "here");
+  char r_comp[] = "";
+  char r_dest[] = "";
+  char r_jump[] = "";
   if(strstr(str, "=") != NULL) {
     char *dest = strtok(str, "=");
     printf("dest: %s", dest);
+  } else {
+    char *dest = translate("null", "dest");
+    strcpy(r_dest, dest);
+    printf("r_dest: %s\n", r_dest);
   }
+
+  printf("%s\n", "here");
 
   if(strstr(str, ";") != NULL) {
     char *comp = strtok(str, ";");
@@ -113,19 +124,16 @@ char * parse(char str[]) {
     char *p2 = translate(jump, "jump");
     /* printf("p1: %s\n", p1); */
     /* printf("p2: %s", p2); */
-    
-    char *result = strcat(p1, p2);
-    //printf("result: %s", result);
+    printf("%s\n", "here");
+    strcpy(r_comp, p1);
+    strcpy(r_jump, p2);
+    printf("r_comp: %s\n", r_comp);
+    /* printf("c1: %s", c1); */
+    /* printf("c2: %s", c2); */
   }
-  return 0;
-}
 
-int main() {
-  char str[256] = "0;JMP"; 
-  parse(str);
-
-  /* char *field = "value1"; */
-  /* char c[100]; */
-  /* strcpy(c, field); */
-  /* printf("%s", c); */
+  char *presult1 = strcat("111", r_comp);
+  char *presult2 = strcat(presult1, r_dest);
+  char *result = strcat(presult2, r_jump);
+  return result;
 }
