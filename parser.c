@@ -101,39 +101,30 @@ char * translate(char *key, char type[]) {
   return "null";
 }
 
+char result[1280] = "";
+
 char * parse(char str[]) {
-  printf("%s\n", "here");
-  char r_comp[] = "";
-  char r_dest[] = "";
-  char r_jump[] = "";
+  char b_start[] = "111";
+  char *dest = "", *comp = "", *jump = "";
+  printf("here!!!\n");
   if(strstr(str, "=") != NULL) {
-    char *dest = strtok(str, "=");
-    printf("dest: %s", dest);
+    dest = strtok(str, "=");
   } else {
-    char *dest = translate("null", "dest");
-    strcpy(r_dest, dest);
-    printf("r_dest: %s\n", r_dest);
+    dest = translate("null", "dest");
   }
-
-  printf("%s\n", "here");
-
+  printf("here!!!\n");
   if(strstr(str, ";") != NULL) {
-    char *comp = strtok(str, ";");
-    char *jump = strtok(NULL, "\0");
-    char *p1 = translate(comp, "comp");
-    char *p2 = translate(jump, "jump");
-    /* printf("p1: %s\n", p1); */
-    /* printf("p2: %s", p2); */
-    printf("%s\n", "here");
-    strcpy(r_comp, p1);
-    strcpy(r_jump, p2);
-    printf("r_comp: %s\n", r_comp);
-    /* printf("c1: %s", c1); */
-    /* printf("c2: %s", c2); */
+    printf("here if!!!\n");
+    comp = strtok(str, ";");
+    jump = strtok(NULL, "\0");
+    comp = translate(comp, "comp");
+    jump = translate(jump, "jump");
   }
-
-  char *presult1 = strcat("111", r_comp);
-  char *presult2 = strcat(presult1, r_dest);
-  char *result = strcat(presult2, r_jump);
-  return result;
+  char r_comp[256] = "", r_dest[256] = "", r_jump[256] = "";
+  strncpy(r_dest, dest, 256);
+  strncpy(r_comp, comp, 256);
+  strncpy(r_jump, jump, 256);
+  sprintf(result,"%s%s%s%s", b_start, r_comp, r_dest, r_jump);
+  char *b = result;
+  return b;
 }
