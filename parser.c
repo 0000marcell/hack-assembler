@@ -103,18 +103,18 @@ char * translate(char *key, char type[]) {
 
 char result[1280] = "";
 
-char * parse(char str[]) {
+char * parse(char str[20]) {
   char b_start[] = "111";
   char *dest = "", *comp = "", *jump = "";
-  printf("here!!!\n");
+  if(strstr(str, "@") != NULL) {
+    char *val = strtok(NULL, "\0");
+  }
   if(strstr(str, "=") != NULL) {
     dest = strtok(str, "=");
   } else {
     dest = translate("null", "dest");
   }
-  printf("here!!!\n");
   if(strstr(str, ";") != NULL) {
-    printf("here if!!!\n");
     comp = strtok(str, ";");
     jump = strtok(NULL, "\0");
     comp = translate(comp, "comp");

@@ -1,11 +1,17 @@
 #include <stdio.h>
+#include <string.h>
 #include "parser.h"
 
+void test(char str[6]) {
+  char *comp = strtok(str, ";");
+  printf("d: %s\n", comp);
+}
+
+
 int main() {
-  char str[256] = "0;JMP"; 
-  printf("testing!!!");
-  char *result = parse(str);
-  printf("%s", result);
+  char str[6] = "0;JMP"; 
+  printf("%s", str);
+  test(str);
 }
 
 
