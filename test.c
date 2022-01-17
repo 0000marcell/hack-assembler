@@ -19,17 +19,17 @@ char * to_binary(int n) {
     j++;
   }
 
-  int z = 15 - strlen(r);
-  printf("z: %d\n", z);
-  char zpad[z] = "";
-  for(i = 0; i < z; i++) {
+  int z = 16 - strlen(r);
+  //printf("z: %d\n", z);
+  char zpad[17] = "1";
+  for(i = 1; i < z; i++) {
     zpad[i] = '0';
   }
-  printf("zpad: %s\n", zpad);
+  //printf("zpad: %s\n", zpad);
   char concat[17];
   sprintf(concat, "%s%s", zpad, r);
-  printf("concat: %s\n", concat);
-  char *ret = &r[0];
+  //printf("concat: %s\n", concat);
+  char *ret = &concat[0];
   return ret;
 }
 

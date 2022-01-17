@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "parser.h"
 
 // destination computation and jump
@@ -73,6 +74,37 @@ const item jump[100] = {
   {"JMP",  "111"}
 };
 
+char * to_binary(int n) {
+  int a[10], i;    
+  for(i=0;n>0;i++) {    
+    a[i]=n%2;    
+    n=n/2;    
+  }    
+
+  char str[2] = "";
+  char r[17] = "";
+  int j = 0;
+  for(i=i-1;i>=0;i--) {    
+    sprintf(str, "%d", a[i]);
+    r[j] = *strdup(str);
+    j++;
+  }
+
+  int z = 16 - strlen(r);
+  printf("z: %d\n", z);
+  char zpad[17] = "1";
+  for(i = 1; i < z; i++) {
+    zpad[i] = '0';
+  }
+  char concat[17] = "";
+  /* printf("zpad: %s\n", zpad); */
+  /* printf("r: %s\n", r); */
+  sprintf(concat, "%s%s", zpad, r);
+  //printf("concat: %s\n", concat);
+  char *ret = &concat[0];
+  return ret;
+}
+
 char * translate(char *key, char type[]) {
   if(strcmp(type, "jump") == 0) {
     for(int i = 0; i < 8; i++) {
@@ -107,7 +139,13 @@ char * parse(char str[20]) {
   char b_start[] = "111";
   char *dest = "", *comp = "", *jump = "";
   if(strstr(str, "@") != NULL) {
-    char *val = strtok(NULL, "\0");
+    char *s = strtok(str, "@");
+    char *val = strtok(s, "\0");
+    printf("val: %s\n", val);
+    int n = atoi(val);
+    printf("number: %d\n", n);
+    comp = to_binary(n);
+    return comp;
   }
   if(strstr(str, "=") != NULL) {
     dest = strtok(str, "=");
