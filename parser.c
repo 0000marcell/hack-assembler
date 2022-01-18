@@ -149,6 +149,11 @@ char * parse(char str[20]) {
   }
   if(strstr(str, "=") != NULL) {
     dest = strtok(str, "=");
+    comp = strtok(NULL, "\0");
+    dest = translate(dest, "dest");
+    comp = translate(comp, "comp");
+    printf("dest: %s\n", dest);
+    printf("comp: %s\n", comp);
   } else {
     dest = translate("null", "dest");
   }
@@ -157,6 +162,8 @@ char * parse(char str[20]) {
     jump = strtok(NULL, "\0");
     comp = translate(comp, "comp");
     jump = translate(jump, "jump");
+  } else {
+    jump = translate("null", "jump");
   }
   char r_comp[256] = "", r_dest[256] = "", r_jump[256] = "";
   strncpy(r_dest, dest, 256);
