@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "parser.h"
 
 // destination computation and jump
@@ -74,6 +75,33 @@ const item jump[100] = {
   {"JMP",  "111"}
 };
 
+char * trim(char * buff) {
+  //PRECEDING CHARACTERS
+  int x = 0;
+  while(1==1) {
+    if((*buff == ' ') || (*buff == '\t') || (*buff == '\r') || (*buff == '\n')) { 
+      x++;
+      ++buff;
+    } else {
+      break;
+    }
+  }
+  //TRAILING CHARACTERS
+  int y = strlen(buff)-1;
+  while(1==1) {
+    if(buff[y] == ' ' || (buff[y] == '\t') || (buff[y] == '\r') || (buff[y] == '\n'))
+    { 
+      y--;
+    }
+    else {
+      break;
+    }
+  }
+  y = strlen(buff)-y;
+  buff[strlen(buff)-y+1]='\0';
+  return buff;
+}
+
 char * to_binary(int n) {
   int a[10], i;    
   for(i=0;n>0;i++) {    
@@ -91,7 +119,7 @@ char * to_binary(int n) {
   }
 
   int z = 16 - strlen(r);
-  printf("z: %d\n", z);
+  //printf("z: %d\n", z);
   char zpad[17] = "1";
   for(i = 1; i < z; i++) {
     zpad[i] = '0';
@@ -106,6 +134,9 @@ char * to_binary(int n) {
 }
 
 char * translate(char *key, char type[]) {
+  char c[5];
+  strcpy(c, key);
+  key = trim(c);
   if(strcmp(type, "jump") == 0) {
     for(int i = 0; i < 8; i++) {
       if(strcmp(key, jump[i].key) == 0) {
@@ -133,6 +164,15 @@ char * translate(char *key, char type[]) {
   return "null";
 }
 
+
+
+char *remove_white_space(char *s) {
+  char* d = s;
+  do while(isspace(*s) || *s == '\t') s++; while((*d++ = *s++));
+  printf("without space: %s\n", d);
+  return d;
+}
+
 char result[1280] = "";
 
 char * parse(char str[20]) {
@@ -141,9 +181,9 @@ char * parse(char str[20]) {
   if(strstr(str, "@") != NULL) {
     char *s = strtok(str, "@");
     char *val = strtok(s, "\0");
-    printf("val: %s\n", val);
+    //printf("val: %s\n", val);
     int n = atoi(val);
-    printf("number: %d\n", n);
+    //printf("number: %d\n", n);
     comp = to_binary(n);
     return comp;
   }
@@ -152,9 +192,8 @@ char * parse(char str[20]) {
     comp = strtok(NULL, "\0");
     dest = translate(dest, "dest");
     comp = translate(comp, "comp");
-    printf("dest: %s\n", dest);
-    printf("comp: %s\n", comp);
   } else {
+    //dest = trim(dest);
     dest = translate("null", "dest");
   }
   if(strstr(str, ";") != NULL) {

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include "./parser.h"
 
 int isNumber(char s[]) {
   for(int i = 0; s[i]!= '\0'; i++) {
@@ -82,7 +83,7 @@ int main() {
         char *subString = strtok(&line[1],")");   // find the second double quote
         // check if subString is a number, if it's it doesn't need to be added
         symbols[current_table_index].key = strdup(subString);
-        symbols[current_table_index].value = line_number;
+        symbols[current_table_index].value = line_number + 1;
         current_table_index++;
       }
       line_number++;
@@ -126,14 +127,32 @@ int main() {
   /* } */
 
   // transform everything
+  char *result_file[200];
+  int result_file_n_lines = 0;
   for(int i = 0; i < line_number; i++) {
     char *line = file_lines[i];
     if(strstr(line, "@") != NULL) {
       char *a = strtok(line, "@"); 
       a = strtok(NULL, "\0"); 
       int val = find_symbol(a);
-      printf("val: %d\n", val);
+      char n1[256];
+      sprintf(n1, "%d", val);
+      char result[256] = "";
+      sprintf(result,"%s%s", "@", n1);
+      char *parsed_result = parse(result);
+      //printf("parsed result: %s\n", parsed_result);
+      result_file[result_file_n_lines] = strdup(parsed_result);
+      result_file_n_lines++;
+    } else {
+      char *parsed_result = parse(line);
+      //printf("parsed result: %s\n", parsed_result);
+      result_file[result_file_n_lines] = strdup(parsed_result);
+      result_file_n_lines++;
     }
+  }
+
+  for(int i = 0; i < result_file_n_lines; i++) {
+    printf("r: %s\n", result_file[i]);
   }
 
   fclose(file);
