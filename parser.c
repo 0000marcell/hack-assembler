@@ -119,16 +119,12 @@ char * to_binary(int n) {
   }
 
   int z = 16 - strlen(r);
-  //printf("z: %d\n", z);
-  char zpad[17] = "1";
+  char zpad[17] = "0";
   for(i = 1; i < z; i++) {
     zpad[i] = '0';
   }
-  char concat[17] = "";
-  /* printf("zpad: %s\n", zpad); */
-  /* printf("r: %s\n", r); */
+  char concat[34] = "";
   sprintf(concat, "%s%s", zpad, r);
-  //printf("concat: %s\n", concat);
   char *ret = &concat[0];
   return ret;
 }
@@ -169,7 +165,6 @@ char * translate(char *key, char type[]) {
 char *remove_white_space(char *s) {
   char* d = s;
   do while(isspace(*s) || *s == '\t') s++; while((*d++ = *s++));
-  printf("without space: %s\n", d);
   return d;
 }
 
@@ -181,9 +176,7 @@ char * parse(char str[20]) {
   if(strstr(str, "@") != NULL) {
     char *s = strtok(str, "@");
     char *val = strtok(s, "\0");
-    //printf("val: %s\n", val);
     int n = atoi(val);
-    //printf("number: %d\n", n);
     comp = to_binary(n);
     return comp;
   }

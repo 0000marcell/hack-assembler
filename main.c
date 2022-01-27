@@ -26,7 +26,6 @@ int is_empty(char * currentline) {
     // print ascii value
     //scanf("%c",&c);
     //e=c;
-    //printf("\n%d",e);
     if(c == '/') {
       if(prev_char_comment) {
         all_blank = 1;
@@ -56,8 +55,6 @@ int current_table_index = 23;
 int find_symbol(char key[]) {
   int val = -1;
   for(int i = 0; i < current_table_index; i++) {
-    //printf("%s == %s\n", subString, symbols[i].key); 
-    //printf(">> %d\n", strcmp(symbols[i].key, subString)); 
     if(strcmp(symbols[i].key, key) == 0) {
       val = symbols[i].value;
       break;
@@ -83,10 +80,11 @@ int main() {
         char *subString = strtok(&line[1],")");   // find the second double quote
         // check if subString is a number, if it's it doesn't need to be added
         symbols[current_table_index].key = strdup(subString);
-        symbols[current_table_index].value = line_number + 1;
+        symbols[current_table_index].value = line_number;
         current_table_index++;
+      } else {
+        line_number++;
       }
-      line_number++;
     }
   }
 
@@ -99,20 +97,15 @@ int main() {
       char *subString = strtok(&ptr[1], "\r"); 
       subString = strtok(subString, "\n"); 
       subString = strtok(subString, " "); 
-      //printf("%c %d", subString[2], subString[2]);
       int is_already_on_table = 0;
       for(int i = 0; i < current_table_index; i++) {
-        //printf("%s == %s\n", subString, symbols[i].key); 
-        //printf(">> %d\n", strcmp(symbols[i].key, subString)); 
         if(strcmp(symbols[i].key, subString) == 0) {
-          //printf("found!\n");
           is_already_on_table = 1;
           break;
         }
       }
 
       if(!is_already_on_table && !isNumber(subString)) {
-        //printf("subString: %s vsi: %d\n", subString, variable_start_index);
         symbols[current_table_index].key = strdup(subString);
         symbols[current_table_index].value = variable_start_index;
         variable_start_index++;
@@ -120,11 +113,6 @@ int main() {
       }
     }
   }
-
-  // Print symbols table
-  /* for(int i = 0; i < current_table_index; i++) { */
-  /*   printf("k: %s v: %d\n", symbols[i].key, symbols[i].value); */
-  /* } */
 
   // transform everything
   char *result_file[200];
@@ -137,23 +125,29 @@ int main() {
       int val = find_symbol(a);
       char n1[256];
       sprintf(n1, "%d", val);
-      char result[256] = "";
+      char result[257] = "";
       sprintf(result,"%s%s", "@", n1);
       char *parsed_result = parse(result);
-      //printf("parsed result: %s\n", parsed_result);
       result_file[result_file_n_lines] = strdup(parsed_result);
       result_file_n_lines++;
     } else {
-      char *parsed_result = parse(line);
-      //printf("parsed result: %s\n", parsed_result);
-      result_file[result_file_n_lines] = strdup(parsed_result);
-      result_file_n_lines++;
+      if(strstr(line, "(") == NULL) {
+        char *parsed_result = parse(line);
+        result_file[result_file_n_lines] = strdup(parsed_result);
+        result_file_n_lines++;
+      }
     }
   }
 
+  FILE *fileasm = fopen("./testfile.hack", "w");
+
+  char concat[34] = "";
   for(int i = 0; i < result_file_n_lines; i++) {
+    sprintf(concat, "%s%s", result_file[i], "\n");
+    fputs(concat, fileasm);
     printf("r: %s\n", result_file[i]);
   }
 
+  fclose(fileasm);
   fclose(file);
 }
